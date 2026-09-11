@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<style>[hidden]{display:none!important}</style>
+<title>Feedback José Lutz</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #FBFAF5;
+    --panel: #F3F1E8;
+    --panel-2: #ECE9DD;
+    --ink: #18170F;
+    --ink-2: #4A4838;
+    --muted: #726F60;
+    --line: #E0DDCF;
+    --line-2: #CFCBB9;
+    --yellow: #F2C200;
+    --yellow-ink: #6B5600;
+    --yellow-soft: #FFF3B8;
+    --red: #C41E2A;
+    --red-soft: #FBE4E5;
+    --green: #2F7A4B;
+    --green-soft: #DDF0E3;
+    --blue: #2C5C8A;
+    --blue-soft: #DEE9F4;
+    --shadow: 0 1px 0 rgba(24,23,15,.06), 0 8px 24px -16px rgba(24,23,15,.25);
+    --hl-band: #F2C200;
+    --hl-ink: #18170F;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15140F; --panel: #1E1D16; --panel-2: #26251C;
+      --ink: #EDEADF; --ink-2: #C9C5B4; --muted: #9A967F;
+      --line: #2E2D23; --line-2: #3D3B2E;
+      --yellow: #F2C200; --yellow-ink: #FFE27A; --yellow-soft: #3A3100;
+      --red: #F0606A; --red-soft: #3B1A1D;
+      --green: #62B985; --green-soft: #1B3324;
+      --blue: #7FB0E0; --blue-soft: #1A2A3A;
+      --shadow: 0 1px 0 rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.6);
+      --hl-band: transparent; --hl-ink: #F2C200;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15140F; --panel: #1E1D16; --panel-2: #26251C;
+    --ink: #EDEADF; --ink-2: #C9C5B4; --muted: #9A967F;
+    --line: #2E2D23; --line-2: #3D3B2E;
+    --yellow: #F2C200; --yellow-ink: #FFE27A; --yellow-soft: #3A3100;
+    --red: #F0606A; --red-soft: #3B1A1D;
+    --green: #62B985; --green-soft: #1B3324;
+    --blue: #7FB0E0; --blue-soft: #1A2A3A;
+    --shadow: 0 1px 0 rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.6);
+    --hl-band: transparent; --hl-ink: #F2C200;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.55 "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  h1, h2, h3 { font-family: "Archivo", "Arial Narrow", Arial, sans-serif; text-wrap: balance; margin: 0; letter-spacing: -.01em; }
+  .mono { font-family: "IBM Plex Mono", Consolas, monospace; }
+  .eyebrow { font-family: "IBM Plex Mono", Consolas, monospace; font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+  /* barra fija */
+  .bar {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar-in {
+    max-width: 820px; margin: 0 auto; padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .bar-title { font-family: "Archivo", sans-serif; font-weight: 700; font-size: 15px; }
+  .progress { flex: 1; min-width: 160px; display: flex; align-items: center; gap: 10px; }
+  .track { flex: 1; height: 6px; background: var(--panel-2); border-radius: 3px; overflow: hidden; }
+  .fill { height: 100%; width: 0%; background: var(--yellow); transition: width .3s ease; }
+  .count { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .sync { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .sync::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--line-2); margin-right: 6px; vertical-align: 1px; }
+  .sync[data-state="shared"]::before { background: var(--green); }
+  .sync[data-state="local"]::before { background: var(--yellow); }
+
+  main { max-width: 820px; margin: 0 auto; padding: 36px 20px 80px; }
+
+  /* cabecera */
+  header.top { display: grid; gap: 18px; padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+  header.top h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 800; line-height: 1.05; }
+  header.top h1 em { font-style: normal; color: var(--hl-ink); background: linear-gradient(transparent 58%, var(--hl-band) 58%, var(--hl-band) 92%, transparent 92%); padding: 0 .08em; }
+  .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px 22px; }
+  .meta div { display: grid; gap: 3px; }
+  .meta b { font-weight: 500; color: var(--ink-2); font-size: 14.5px; }
+  .lede { max-width: 62ch; color: var(--ink-2); margin: 0; }
+
+  /* resumen */
+  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 10px; margin-bottom: 30px; }
+  .sum { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: grid; gap: 2px; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+  .sum:hover { border-color: var(--line-2); }
+  .sum[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .sum .n { font-family: "Archivo", sans-serif; font-weight: 700; font-size: 26px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .sum .l { font-size: 13px; color: var(--muted); }
+  .sum .n.red { color: var(--red); } .sum .n.green { color: var(--green); } .sum .n.blue { color: var(--blue); } .sum .n.yel { color: var(--yellow-ink); }
+
+  /* secciones */
+  section.grupo { margin-top: 36px; }
+  section.grupo > .eyebrow { margin-bottom: 10px; }
+  section.grupo > h2 { font-size: 22px; font-weight: 700; margin-bottom: 14px; }
+
+  /* punto */
+  article.punto {
+    display: grid; grid-template-columns: 52px 1fr; gap: 0 16px;
+    padding: 22px 0; border-top: 1px solid var(--line);
+  }
+  article.punto:last-of-type { border-bottom: 1px solid var(--line); }
+  article.punto[hidden] { display: none; }
+  .num { font-family: "Archivo", sans-serif; font-weight: 800; font-size: 30px; line-height: 1; color: var(--ink); padding-top: 2px; font-variant-numeric: tabular-nums; }
+  .num small { display: block; font: 500 10.5px/1 "IBM Plex Mono", monospace; letter-spacing: .1em; color: var(--muted); margin-top: 6px; }
+  .cuerpo { display: grid; gap: 12px; min-width: 0; }
+  .donde { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .chip { font-size: 12.5px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--ink-2); background: var(--panel); }
+  .ruta { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); word-break: break-all; }
+  .estado { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; margin-left: auto; }
+  .estado.aplicar { background: var(--green-soft); color: var(--green); }
+  .estado.jose { background: var(--red-soft); color: var(--red); }
+  .estado.pablo { background: var(--blue-soft); color: var(--blue); }
+  .estado.funcion { background: var(--yellow-soft); color: var(--yellow-ink); }
+
+  blockquote.dijo {
+    margin: 0; padding: 10px 16px; border-left: 3px solid var(--yellow);
+    background: var(--panel); border-radius: 0 6px 6px 0;
+    font-size: 17px; line-height: 1.5; font-style: italic; color: var(--ink);
+  }
+  blockquote.dijo .eyebrow { display: block; font-style: normal; margin-bottom: 4px; }
+
+  .par { display: grid; gap: 10px; align-items: start; }
+  @media (min-width: 640px) { .par { grid-template-columns: 1fr 1fr; } }
+  .caja { display: grid; gap: 4px; min-width: 0; }
+  .caja p { margin: 0; }
+  .caja.hoy p { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--ink-2); background: var(--panel); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--line); overflow-wrap: anywhere; }
+  .caja.pide p { font-weight: 500; }
+  .nota { font-size: 14px; color: var(--ink-2); margin: 0; max-width: 68ch; }
+  .nota b { font-weight: 600; color: var(--ink); }
+
+  /* opciones */
+  .opts { border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; }
+  .opts table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .opts th, .opts td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .opts th { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; background: var(--panel); }
+  .opts tr:last-child td { border-bottom: 0; }
+  .opts td:first-child { color: var(--muted); }
+
+  /* tareas */
+  .tareas { display: grid; gap: 6px; margin-top: 2px; }
+  .tareas .eyebrow { margin-bottom: 2px; }
+  label.t {
+    display: grid; grid-template-columns: 20px 1fr auto; gap: 10px; align-items: start;
+    padding: 8px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg);
+    cursor: pointer; font-size: 14.5px; line-height: 1.45;
+  }
+  label.t:hover { border-color: var(--line-2); }
+  label.t input { margin: 3px 0 0; width: 16px; height: 16px; accent-color: var(--yellow-ink); cursor: pointer; }
+  label.t input:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+  label.t:has(input:checked) { background: var(--panel); }
+  label.t:has(input:checked) .txt { text-decoration: line-through; text-decoration-color: var(--line-2); color: var(--muted); }
+  label.t .quien { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-top: 3px; white-space: nowrap; }
+  label.t .quien.jose { color: var(--red); } label.t .quien.pablo { color: var(--blue); } label.t .quien.dev { color: var(--green); }
+
+  /* lista consolidada */
+  .consol { display: grid; gap: 22px; }
+  .consol h3 { font-size: 16px; font-weight: 700; display: flex; gap: 10px; align-items: baseline; }
+  .consol h3 .count { font-weight: 400; }
+  .consol .tareas { gap: 5px; }
+  .consol label.t .ref { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); margin-right: 6px; }
+
+  .regla { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: 14.5px; }
+  .regla:last-child { border-bottom: 0; }
+  .regla .no { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--red); }
+  .regla .si { font-weight: 500; }
+  .regla .fl { font-family: "IBM Plex Mono", monospace; color: var(--muted); font-size: 12px; }
+  .reglas { border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+
+  footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; display: grid; gap: 6px; }
+  footer p { margin: 0; }
+
+  @media (prefers-reduced-motion: reduce) { .fill { transition: none; } }
+  @media (max-width: 520px) {
+    article.punto { grid-template-columns: 1fr; }
+    .num { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+    .num small { margin: 0; }
+    .estado { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <span class="bar-title">Feedback José Lutz</span>
+    <div class="progress">
+      <div class="track"><div class="fill" id="fill"></div></div>
+      <span class="count" id="count">0 / 0 tareas</span>
+    </div>
+    <span class="sync" id="sync" data-state="loading">conectando…</span>
+  </div>
+</div>
+
+<main>
+  <header class="top">
+    <span class="eyebrow">Catalizadora · TN GlobalLink · Truly Nolen Guatemala</span>
+    <h1>Requerimientos de José Lutz sobre TN GlobalLink, <em>punto por punto</em></h1>
+    <p class="lede">José Lutz revisó la plataforma sección por sección y envió 19 comentarios con captura de pantalla. Cada uno aparece aquí con sus palabras textuales, el texto o estado actual, lo que solicitó y las tareas que se derivan. Las casillas permiten ir marcando lo resuelto; quedan guardadas en el navegador de quien las marca.</p>
+    <div class="meta">
+      <div><span class="eyebrow">Cliente</span><b>José Lutz · Propietario de franquicia · Owner GT</b></div>
+      <div><span class="eyebrow">Producto</span><b class="mono" style="font-size:13px">app.trulynolen.tech/globalink</b></div>
+      <div><span class="eyebrow">Recopilado</span><b>11 de septiembre de 2026 · WhatsApp</b></div>
+      <div><span class="eyebrow">Elaborado por</span><b>Roger Soto · Catalizadora</b></div>
+    </div>
+  </header>
+
+  <div class="summary" role="group" aria-label="Filtrar por tipo">
+    <button class="sum" data-f="all" aria-pressed="true"><span class="n">19</span><span class="l">puntos en total</span></button>
+    <button class="sum" data-f="aplicar" aria-pressed="false"><span class="n green">9</span><span class="l">textos definidos, se aplican ya</span></button>
+    <button class="sum" data-f="jose" aria-pressed="false"><span class="n red">4</span><span class="l">textos que José debe elegir</span></button>
+    <button class="sum" data-f="pablo" aria-pressed="false"><span class="n blue">4</span><span class="l">visual, datos e insumos</span></button>
+    <button class="sum" data-f="funcion" aria-pressed="false"><span class="n yel">2</span><span class="l">funcionalidad nueva</span></button>
+  </div>
+
+  <section class="grupo" id="inicio">
+    <span class="eyebrow">Sección</span>
+    <h2>Inicio</h2>
+
+    <article class="punto" data-f="aplicar">
+      <div class="num">04<small>Inicio</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Tarjeta “Por sector”</span><span class="ruta">/globalink</span><span class="estado aplicar">se aplica ya</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>Poner Alimentos primero</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Hotelería, salud, alimentos… el rubro que trabajás.</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>Alimentos de primero en el subtítulo. Ej.: “Alimentos, hotelería, salud… el rubro que trabajás.”</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t04"><span class="txt">Cambiar el subtítulo de la tarjeta “Por sector” del inicio para que Alimentos vaya primero</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+
+    <article class="punto" data-f="aplicar">
+      <div class="num">17<small>Inicio</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Pie de la primera página</span><span class="ruta">/globalink</span><span class="estado aplicar">se aplica ya</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>Abajo de todo en la primer página quiero que diga: TRULY NEVER SLEEPS. Como un banner. Ojalá en movimiento.</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Estado actual</span><p>No existe.</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>Banner al final del inicio con el texto TRULY NEVER SLEEPS en mayúsculas. Animado (marquesina) si se puede; lo pide como “ojalá”, no como obligatorio.</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t25"><span class="txt">Agregar banner “TRULY NEVER SLEEPS” al pie del inicio, con animación de marquesina y respeto a prefers-reduced-motion</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="grupo" id="prospectar">
+    <span class="eyebrow">Sección</span>
+    <h2>Prospectar</h2>
+
+    <article class="punto" data-f="aplicar">
+      <div class="num">01<small>Prospectar</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Por sector · resultados</span><span class="ruta">/globalink/sales/discover/sector</span><span class="estado aplicar">se aplica ya</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>10 empresas de tu zona ordenadas por nuestro algoritmo según sus necesidades de plagas</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Estado actual</span><p>Al elegir un sector, los resultados no muestran un criterio de orden visible para el usuario.</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>Mostrar 10 empresas de la zona del usuario, ordenadas por el algoritmo según sus necesidades de plagas.</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t01"><span class="txt">Limitar y ordenar los resultados de Por sector: 10 empresas de la zona, ranking por necesidad de plagas, y que el criterio de orden se vea en pantalla</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+
+    <article class="punto" data-f="aplicar">
+      <div class="num">02<small>Prospectar</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Por sector · selector “Sector”</span><span class="ruta">/globalink/sales/discover/sector</span><span class="estado aplicar">se aplica ya</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>Poner alimentos primero</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Primera opción y valor por defecto: “Hoteles”</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>Alimentos como primera opción del selector.</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t02"><span class="txt">Reordenar el selector de Sector: Alimentos primero (y como valor por defecto)</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+
+    <article class="punto" data-f="aplicar">
+      <div class="num">03<small>Prospectar</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Por sector · estado vacío</span><span class="ruta">/globalink/sales/discover/sector</span><span class="estado aplicar">se aplica ya</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>Todavía no hay empresas guardadas para esta búsqueda. Elegí un sector para comenzar</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Todavía no hay empresas guardadas para esta lente. Elegí un sector para comenzar.</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>Todavía no hay empresas guardadas para esta búsqueda. Elegí un sector para comenzar.</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t03"><span class="txt">Cambiar “lente” por “búsqueda” en el estado vacío de Por sector (revisar si “lente” aparece en otras pantallas)</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+
+    <article class="punto" data-f="pablo">
+      <div class="num">16<small>Prospectar</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Sectores comunes · buscador global</span><span class="ruta">/globalink/sales/discover/sector · ⌘K</span><span class="estado pablo">falta insumo</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>A estas categorías hay que agregar las que estén en el TNI Management. En Por sector y en Buscar todo.</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Hoteles · Restaurantes · Salud privada · Manufactura alimentos · Retail food · Retail general</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>Agregar todas las categorías de sector que existen en TNI Management (sistema interno de Truly Nolen), tanto en Por sector como en el buscador global. Alimentos primero.</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t22"><span class="txt">Pedir a José la lista completa de categorías de TNI Management, o acceso para exportarla</span><span class="quien jose">josé</span></label>
+          <label class="t"><input type="checkbox" data-t="t23"><span class="txt">Decidir si las categorías se sincronizan automáticamente con TNI Management o se cargan una sola vez</span><span class="quien pablo">pablo</span></label>
+          <label class="t"><input type="checkbox" data-t="t24"><span class="txt">Cargar las categorías en el selector de Por sector y en el buscador global, con Alimentos primero</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+
+    <article class="punto" data-f="aplicar">
+      <div class="num">05<small>Prospectar</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Cross-país · subtítulo</span><span class="ruta">/globalink/sales/discover/cross-pais</span><span class="estado aplicar">se aplica ya</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>Potenciales cuentas que ya son clientes de TN en otros países</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Cadenas que ya son clientes de TN en otro país y…</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>Potenciales cuentas que ya son clientes de TN en otros países</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t05"><span class="txt">Reemplazar el subtítulo de Cross-país por el texto de José</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+
+    <article class="punto" data-f="aplicar">
+      <div class="num">06<small>Prospectar</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Intra-cuenta · subtítulo</span><span class="ruta">/globalink/sales/discover/intra-cuenta</span><span class="estado aplicar">se aplica ya</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>Proveedores, clientes, sucursales, competencia, etc de tus actuales Clientes</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Quién vende, compra y compite alrededor de tus clientes.</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>Proveedores, clientes, sucursales, competencia, etc. de tus actuales clientes</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t06"><span class="txt">Reemplazar el subtítulo de Intra-cuenta por el texto de José</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="grupo" id="rocket">
+    <span class="eyebrow">Sección</span>
+    <h2>Rocket</h2>
+
+    <article class="punto" data-f="pablo">
+      <div class="num">07<small>Rocket</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Ícono principal</span><span class="ruta">/globalink/rocket</span><span class="estado pablo">falta insumo</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>En lugar de ese rocket poner este por favor</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Estado actual</span><p>Emoji de cohete genérico dentro de un círculo.</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>El logo oficial “Truly Rocket” del PDF “Truly Global &amp; Truly Rocket.pdf”: el ratón de Truly Nolen (orejas negras, bigotes), cohete negro despegando con estela roja, y el texto TRULY ROCKET en rojo condensado.</p></div>
+        </div>
+        <p class="nota">Solo llegó una captura del PDF. Para producción hace falta el archivo en vector (SVG, AI, PDF vectorial) o PNG de alta resolución con fondo transparente.</p>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t07"><span class="txt">Pedir a José el logo Truly Rocket en SVG o PNG transparente</span><span class="quien jose">josé</span></label>
+          <label class="t"><input type="checkbox" data-t="t08"><span class="txt">Reemplazar el ícono del cohete en la pantalla Rocket por el logo Truly Rocket</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+
+    <article class="punto" data-f="jose">
+      <div class="num">08<small>Rocket</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Centro de mando · métricas</span><span class="ruta">/globalink/rocket</span><span class="estado jose">José elige texto</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Pregunta de José</span>¿Cuál es la diferencia de “en cadencia ahora” y “toques en 24 hs”? Si me lo dices quizás pueda corregir las palabras para que se entienda mejor.</blockquote>
+        <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>0 en cadencia ahora · 0 toques en 24 h · 48 rondas en 24 h</p></div>
+        <p class="nota"><b>Explicación que se le dio</b> (deducida de la pantalla, no del código): <b>en cadencia ahora</b> es cuántos prospectos están dentro de una secuencia de seguimiento activa, la ventana de 3 toques en 8 días; es un inventario. <b>Toques en 24 h</b> es cuántos mensajes reales mandó Rocket en las últimas 24 horas; es actividad. <b>Rondas en 24 h</b> es cuántas veces Rocket se despertó a revisar, cada 30 minutos.</p>
+        <div class="opts"><table>
+          <thead><tr><th>Hoy dice</th><th>Opción A</th><th>Opción B</th></tr></thead>
+          <tbody>
+            <tr><td>en cadencia ahora</td><td>prospectos en seguimiento</td><td>empresas que Rocket está trabajando</td></tr>
+            <tr><td>toques en 24 h</td><td>mensajes enviados hoy</td><td>contactos hechos en 24 h</td></tr>
+            <tr><td>rondas en 24 h</td><td>veces que Rocket revisó hoy</td><td>revisiones en 24 h</td></tr>
+          </tbody>
+        </table></div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t09"><span class="txt">Confirmar en el código qué mide exactamente cada métrica del Centro de mando</span><span class="quien pablo">pablo</span></label>
+          <label class="t"><input type="checkbox" data-t="t10"><span class="txt">José elige las etiquetas finales (opción A, B o la suya)</span><span class="quien jose">josé</span></label>
+          <label class="t"><input type="checkbox" data-t="t11"><span class="txt">Aplicar las etiquetas elegidas en las tres tarjetas de métricas</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="grupo" id="tablero">
+    <span class="eyebrow">Sección</span>
+    <h2>Tablero</h2>
+
+    <article class="punto" data-f="aplicar">
+      <div class="num">09<small>Tablero</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Estado vacío</span><span class="ruta">/globalink/pipeline</span><span class="estado aplicar">se aplica ya</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>En vez de la tarjeta, la información</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Cuando Rocket consiga una cita o te asignen un lead, la tarjeta aparece en la primera columna.</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>Cuando Rocket consiga una cita o te asignen un lead, la información aparece en la primera columna.</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t12"><span class="txt">Cambiar “la tarjeta” por “la información” en el estado vacío del tablero</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+
+    <article class="punto" data-f="aplicar">
+      <div class="num">10<small>Tablero</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Texto de ayuda de columnas</span><span class="ruta">/globalink/pipeline</span><span class="estado aplicar">se aplica ya</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>Arrastra la información para cambiarla de status</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Arrastrá una tarjeta para cambiarla de etapa</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>Arrastrá la información para cambiarla de status</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t13"><span class="txt">Cambiar el texto de ayuda del tablero: “información” en vez de “tarjeta”, “status” en vez de “etapa”</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="grupo" id="equipo">
+    <span class="eyebrow">Sección</span>
+    <h2>Tu equipo</h2>
+
+    <article class="punto" data-f="jose">
+      <div class="num">11<small>Tu equipo</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Titular</span><span class="ruta">/globalink/team</span><span class="estado jose">José elige texto</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Pregunta de José</span>¿Qué significa “quién está cargado”? Decímelo y veo cómo decirlo mejor.</blockquote>
+        <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Quién está cargado, quién puede tomar más y qué no es de nadie</p></div>
+        <p class="nota"><b>Explicación que se le dio:</b> “cargado” es la forma rioplatense de decir sobrecargado. El titular describe lo que muestra la página: <b>quién está cargado</b> son los vendedores con demasiados leads activos; <b>quién puede tomar más</b> son los que tienen espacio; <b>qué no es de nadie</b> son los leads sin dueño, que se enfrían en 48 h.</p>
+        <div class="opts"><table>
+          <thead><tr><th>Opción</th><th>Titular</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>Quién tiene más trabajo, quién tiene espacio y qué leads están sin asignar</td></tr>
+            <tr><td>B</td><td>Carga de trabajo del equipo y leads sin asignar</td></tr>
+            <tr><td>C</td><td>Cuánto trabajo tiene cada vendedor y qué leads no tienen dueño</td></tr>
+          </tbody>
+        </table></div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t14"><span class="txt">José elige el titular de Tu equipo (opción A, B, C o el suyo)</span><span class="quien jose">josé</span></label>
+          <label class="t"><input type="checkbox" data-t="t15"><span class="txt">Aplicar el titular elegido; evaluar renombrar “Carga por vendedor” a “Trabajo por vendedor”</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="grupo" id="conversaciones">
+    <span class="eyebrow">Sección</span>
+    <h2>Conversaciones</h2>
+
+    <article class="punto" data-f="jose">
+      <div class="num">12<small>Conversaciones</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Panel “Bandejas”</span><span class="ruta">/globalink/conversations</span><span class="estado jose">José elige texto</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Pregunta de José</span>¿Qué quiere decir “Las lleva Truly”? ¿“Mías”? ¿“Todas”? Necesita más claridad.</blockquote>
+        <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Te esperan · Las lleva Truly · Esperando al cliente · Mías · Todas</p></div>
+        <p class="nota"><b>Explicación que se le dio:</b> son filtros según quién debe actuar. <b>Te esperan</b>: el cliente escribió y falta que un humano responda. <b>Las lleva Truly</b>: las atiende el bot de IA solo. <b>Esperando al cliente</b>: ya se respondió, la pelota está del lado del cliente. <b>Mías</b>: asignadas al usuario conectado. <b>Todas</b>: sin filtro.</p>
+        <div class="opts"><table>
+          <thead><tr><th>Hoy dice</th><th>Opción A</th><th>Opción B</th></tr></thead>
+          <tbody>
+            <tr><td>Te esperan</td><td>Pendientes de responder</td><td>Requieren tu respuesta</td></tr>
+            <tr><td>Las lleva Truly</td><td>Atendidas por la IA</td><td>En manos del bot</td></tr>
+            <tr><td>Esperando al cliente</td><td>Esperando respuesta del cliente</td><td>Cliente debe responder</td></tr>
+            <tr><td>Mías</td><td>Asignadas a mí</td><td>Mis conversaciones</td></tr>
+            <tr><td>Todas</td><td>Todas las conversaciones</td><td>Todas</td></tr>
+          </tbody>
+        </table></div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t16"><span class="txt">José elige los nombres de las cinco bandejas</span><span class="quien jose">josé</span></label>
+          <label class="t"><input type="checkbox" data-t="t17"><span class="txt">Aplicar los nombres elegidos en el panel de Bandejas</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="grupo" id="reportes">
+    <span class="eyebrow">Sección</span>
+    <h2>Reportes</h2>
+
+    <article class="punto" data-f="aplicar">
+      <div class="num">13<small>Reportes</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Salud operativa · titular</span><span class="ruta">/globalink/reports/salud-operativa</span><span class="estado aplicar">se aplica ya</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>Terminar la frase en 479 días. Sacar el resto.</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Ninguna queja entró en 90 días, pero quedan 399 abiertas. El dato dejó de llegar hace 479 días: es una fuente cortada, no calma.</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>Ninguna queja entró en 90 días, pero quedan 399 abiertas. El dato dejó de llegar hace 479 días.</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t18"><span class="txt">Quitar “: es una fuente cortada, no calma” del titular de Salud operativa</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+
+    <article class="punto" data-f="jose">
+      <div class="num">14<small>Reportes</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Pipeline · subtítulo</span><span class="ruta">/globalink/reports/pipeline</span><span class="estado jose">José elige texto</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Pregunta de José</span>¿Qué significa “son la otra mitad de la respuesta”?</blockquote>
+        <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>…por cada oficina en los últimos 365 días, convertido a GTQ. Las que están en cero cuentan igual: son la otra mitad de la respuesta.</p></div>
+        <p class="nota"><b>Explicación que se le dio:</b> el reporte compara oficinas que facturaron con las que no emitieron ninguna orden. La frase dice que las oficinas en cero también son un dato relevante porque señalan franquicias inactivas. Es una figura literaria que no aporta claridad.</p>
+        <div class="opts"><table>
+          <thead><tr><th>Opción</th><th>Texto</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>Las oficinas sin órdenes también se muestran: indican dónde hay franquicias inactivas.</td></tr>
+            <tr><td>B</td><td>Se incluyen las oficinas que no facturaron, para ver la red completa.</td></tr>
+            <tr><td>C</td><td>Quitar la frase y dejar solo: “Facturación por oficina en los últimos 365 días, convertida a GTQ.”</td></tr>
+          </tbody>
+        </table></div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t19"><span class="txt">José elige el subtítulo de Pipeline (A, B, C o el suyo)</span><span class="quien jose">josé</span></label>
+          <label class="t"><input type="checkbox" data-t="t20"><span class="txt">Aplicar el subtítulo elegido</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+
+    <article class="punto" data-f="aplicar">
+      <div class="num">15<small>Reportes</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">ROI · titular y tarjetas</span><span class="ruta">/globalink/reports/roi</span><span class="estado aplicar">se aplica ya</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>Se invirtieron debiera decir</blockquote>
+        <div class="par">
+          <div class="caja hoy"><span class="eyebrow">Texto actual</span><p>Se gastaron Q 194.42 GTQ en 90 días y no salió ninguna reunión. · Gasto · 90 días · Gasto sin oficina</p></div>
+          <div class="caja pide"><span class="eyebrow">Solicitó</span><p>“Se invirtieron Q 194.42 GTQ en 90 días…”. Por consistencia, en todo el reporte ROI usar “inversión” en vez de “gasto”.</p></div>
+        </div>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t21"><span class="txt">Cambiar “gastaron/gasto” por “invirtieron/inversión” en el titular y las tarjetas del reporte ROI</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="grupo" id="cuenta">
+    <span class="eyebrow">Sección</span>
+    <h2>Cuenta, facturación y usuarios</h2>
+    <p class="nota" style="margin-bottom:14px">Estos dos puntos no son textos sino capacidades que José esperaba y no encontró. Antes de estimar hay que confirmar si las pantallas existen y no las vio, o si no existen.</p>
+
+    <article class="punto" data-f="funcion">
+      <div class="num">18<small>Cuenta</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Perfil y pagos</span><span class="estado funcion">funcionalidad</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>Al principio no vi si está la carga de datos personales y poner la tarjeta de crédito para el pago mensual y la tarjeta para el pago de los tokens.</blockquote>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t26"><span class="txt">Confirmar si ya existen pantallas de perfil y facturación; si existen, por qué el propietario no las encontró</span><span class="quien pablo">pablo</span></label>
+          <label class="t"><input type="checkbox" data-t="t27"><span class="txt">Perfil: cargar datos personales del propietario y de la franquicia</span><span class="quien dev">dev</span></label>
+          <label class="t"><input type="checkbox" data-t="t28"><span class="txt">Registrar tarjeta de crédito para el cobro mensual de la suscripción</span><span class="quien dev">dev</span></label>
+          <label class="t"><input type="checkbox" data-t="t29"><span class="txt">Registrar tarjeta (puede ser otra) para el cobro del consumo de tokens, con consumo acumulado visible</span><span class="quien dev">dev</span></label>
+        </div>
+      </div>
+    </article>
+
+    <article class="punto" data-f="funcion">
+      <div class="num">19<small>Cuenta</small></div>
+      <div class="cuerpo">
+        <div class="donde"><span class="chip">Vendedores y límites</span><span class="estado funcion">funcionalidad</span></div>
+        <blockquote class="dijo"><span class="eyebrow">Comentario de José</span>Tampoco vi dónde se autoriza a otros vendedores a usar el sistema y poner un límite de dinero a lo que puede gastar.</blockquote>
+        <div class="tareas"><span class="eyebrow">Tareas</span>
+          <label class="t"><input type="checkbox" data-t="t30"><span class="txt">Confirmar si ya existe gestión de usuarios para el propietario de franquicia</span><span class="quien pablo">pablo</span></label>
+          <label class="t"><input type="checkbox" data-t="t31"><span class="txt">Invitar y autorizar vendedores de la franquicia, con rol, y poder pausar o revocar el acceso</span><span class="quien dev">dev</span></label>
+          <label class="t"><input type="checkbox" data-t="t32"><span class="txt">Límite de dinero en tokens por vendedor</span><span class="quien dev">dev</span></label>
+          <label class="t"><input type="checkbox" data-t="t33"><span class="txt">Definir qué pasa al llegar al límite: aviso al propietario, bloqueo de búsquedas, o ambos</span><span class="quien pablo">pablo</span></label>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="grupo" id="reglas">
+    <span class="eyebrow">Transversal</span>
+    <h2>Vocabulario que pidió José</h2>
+    <div class="reglas">
+      <div class="regla"><span class="no">tarjeta</span><span class="fl">→</span><span class="si">información</span></div>
+      <div class="regla"><span class="no">etapa</span><span class="fl">→</span><span class="si">status</span></div>
+      <div class="regla"><span class="no">gasto · se gastaron</span><span class="fl">→</span><span class="si">inversión · se invirtieron</span></div>
+      <div class="regla"><span class="no">lente</span><span class="fl">→</span><span class="si">búsqueda</span></div>
+      <div class="regla"><span class="no">Hotelería, salud, alimentos…</span><span class="fl">→</span><span class="si">Alimentos siempre primero</span></div>
+    </div>
+    <p class="nota" style="margin-top:14px">Cuatro de las cinco preguntas de José vienen del mismo origen: titulares con tono narrativo (“es una fuente cortada, no calma”, “la otra mitad de la respuesta”, “quién está cargado”). Él prefiere lenguaje directo y operativo.</p>
+    <div class="tareas" style="margin-top:12px">
+      <label class="t"><input type="checkbox" data-t="t34"><span class="txt">Revisar todos los titulares y textos de ayuda de la plataforma con el criterio de lenguaje directo, no solo los que José marcó</span><span class="quien pablo">pablo</span></label>
+    </div>
+  </section>
+
+  <section class="grupo" id="lista">
+    <span class="eyebrow">Para ejecutar</span>
+    <h2>Todas las tareas, según quién las destraba</h2>
+    <div class="consol" id="consol"></div>
+  </section>
+
+  <footer>
+    <p>Recopilado por Roger Soto a partir de los mensajes de José Lutz en el grupo de WhatsApp, 11 de septiembre de 2026. Las explicaciones de los puntos 8, 11, 12 y 14 se dedujeron de las pantallas, no del código; conviene confirmarlas.</p>
+    <p id="foot-sync"></p>
+  </footer>
+</main>
+
+<script>
+(function () {
+  const boxes = Array.from(document.querySelectorAll('input[type="checkbox"][data-t]'));
+  const ids = Array.from(new Set(boxes.map(b => b.dataset.t)));
+  const state = {};
+  let db = null;
+  const LS = 'feedback-jose-lutz:tareas';
+
+  // ---- lista consolidada (misma tarea, mismo id: los checkboxes se sincronizan) ----
+  const grupos = [
+    { k: 'dev', titulo: 'Se aplican ya, no dependen de nadie', filtro: t => t.quien === 'dev' && !t.bloqueada },
+    { k: 'jose', titulo: 'Esperan una respuesta de José', filtro: t => t.quien === 'josé' },
+    { k: 'pablo', titulo: 'Pablo decide o confirma', filtro: t => t.quien === 'pablo' },
+    { k: 'dev2', titulo: 'Se aplican cuando llegue lo anterior', filtro: t => t.quien === 'dev' && t.bloqueada },
+  ];
+  const bloqueadas = new Set(['t08','t11','t15','t17','t20','t24','t27','t28','t29','t31','t32']);
+  const tareas = boxes.filter(b => b.closest('article, #reglas')).map(b => {
+    const art = b.closest('article');
+    const num = art ? art.querySelector('.num').firstChild.textContent.trim() : 'TR';
+    return { id: b.dataset.t, texto: b.parentElement.querySelector('.txt').textContent, quien: b.parentElement.querySelector('.quien').textContent, punto: num, bloqueada: bloqueadas.has(b.dataset.t) };
+  });
+  const consol = document.getElementById('consol');
+  grupos.forEach(g => {
+    const lista = tareas.filter(g.filtro);
+    if (!lista.length) return;
+    const wrap = document.createElement('div');
+    const h = document.createElement('h3');
+    h.innerHTML = `${g.titulo} <span class="count" data-g="${g.k}">0 / ${lista.length}</span>`;
+    const ul = document.createElement('div'); ul.className = 'tareas';
+    lista.forEach(t => {
+      const l = document.createElement('label'); l.className = 't';
+      l.innerHTML = `<input type="checkbox" data-t="${t.id}"><span class="txt"><span class="ref">P${t.punto}</span>${t.texto}</span><span class="quien ${t.quien === 'josé' ? 'jose' : t.quien}">${t.quien}</span>`;
+      ul.appendChild(l);
+    });
+    wrap.appendChild(h); wrap.appendChild(ul); consol.appendChild(wrap);
+  });
+  const all = Array.from(document.querySelectorAll('input[type="checkbox"][data-t]'));
+
+  // ---- render ----
+  function render() {
+    all.forEach(b => { b.checked = !!(state[b.dataset.t] && state[b.dataset.t].done); });
+    const done = ids.filter(id => state[id] && state[id].done).length;
+    document.getElementById('count').textContent = `${done} / ${ids.length} tareas`;
+    document.getElementById('fill').style.width = (ids.length ? (done / ids.length * 100) : 0) + '%';
+    grupos.forEach(g => {
+      const lista = tareas.filter(g.filtro);
+      const d = lista.filter(t => state[t.id] && state[t.id].done).length;
+      const el = document.querySelector(`[data-g="${g.k}"]`);
+      if (el) el.textContent = `${d} / ${lista.length}`;
+    });
+  }
+
+  function setSync(mode) {
+    const s = document.getElementById('sync'); const f = document.getElementById('foot-sync');
+    s.dataset.state = mode;
+    if (mode === 'shared') { s.textContent = 'guardado compartido'; f.textContent = 'Las tareas marcadas se guardan para todos los que abran esta página.'; }
+    else if (mode === 'local') { s.textContent = 'se guarda en este navegador'; f.textContent = 'Lo que marques queda guardado en este navegador; otra persona que abra el link ve sus propias casillas.'; }
+    else { s.textContent = 'conectando…'; }
+  }
+
+  // ---- persistencia ----
+  function loadLocal() { try { Object.assign(state, JSON.parse(localStorage.getItem(LS) || '{}')); } catch (e) {} }
+  function saveLocal() { try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {} }
+
+  async function toggle(id, done) {
+    state[id] = { done, at: new Date().toISOString() };
+    render();
+    if (db) {
+      try { await db.doc('tareas/' + id).set(state[id]); }
+      catch (e) { saveLocal(); }
+    } else saveLocal();
+  }
+
+  all.forEach(b => b.addEventListener('change', () => toggle(b.dataset.t, b.checked)));
+
+  loadLocal(); render();
+
+  (async () => {
+    try {
+      const use = window.claude && window.claude.use;
+      db = use ? await window.claude.use('db') : null;
+    } catch (e) { db = null; }
+    if (!db) { setSync('local'); return; }
+    try {
+      db.collection('tareas').onSnapshot(snap => {
+        ids.forEach(id => { delete state[id]; });
+        snap.docs.forEach(d => { const v = d.data(); if (v) state[d.id] = v; });
+        render(); setSync('shared');
+      }, () => setSync('local'));
+    } catch (e) { setSync('local'); }
+  })();
+
+  // ---- filtros ----
+  const puntos = Array.from(document.querySelectorAll('article.punto'));
+  document.querySelectorAll('.sum').forEach(btn => btn.addEventListener('click', () => {
+    const f = btn.dataset.f;
+    document.querySelectorAll('.sum').forEach(b => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
+    puntos.forEach(p => { p.hidden = !(f === 'all' || p.dataset.f === f); });
+    document.querySelectorAll('section.grupo').forEach(s => {
+      const arts = s.querySelectorAll('article.punto');
+      if (arts.length) s.hidden = Array.from(arts).every(a => a.hidden);
+    });
+  }));
+})();
+</script>
+</body>
+</html>
